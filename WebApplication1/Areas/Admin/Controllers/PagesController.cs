@@ -71,5 +71,92 @@ namespace WebApplication1.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        // GET: Admin/Pages/EditPage/id
+
+        [HttpGet]
+        public ActionResult EditPage(int id)
+        {
+            PageVM model ;
+            using (Db db=new Db())
+            {
+                PagesDTO dto = db.pages.Find(id);
+                if (dto==null)
+                {
+                    return Content("The page does not exist");
+                }
+                else
+                {
+                    model = new PageVM(dto);
+                }
+            }
+            return View(model);
+        }
+
+
+        // GET: Admin/Pages/EditPage/id
+        [HttpPost]
+        public ActionResult EditPage(PageVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            using (Db db=new Db())
+            {
+                int id = model.Id;
+                string slug = "home";
+                PagesDTO dTO = db.pages.Find(id);
+                dTO.Title = model.Title;
+                if (model.Slug!="home")
+                {
+                    if (string.IsNullOrWhiteSpace(model.Slug))
+                    {
+                        slug = model.Title.Replace(" ", "-").ToLower();
+                    }
+                    else
+                    {
+                        slug=model.Slug.Replace(" ", "-").ToLower();
+                    }
+                }
+                if (db.pages.Where(x=>x.Id!=id).Any(x=>x.Title==model.Title))
+                {
+                    ModelState.AddModelError("", "That title already exist");
+                    return View(model);
+                }
+                else if (db.pages.Where(x => x.Id != id).Any(x => x.Slug == slug))
+                {
+                    ModelState.AddModelError("", "That slug already exist");
+                    return View(model);
+                }
+                dTO.Slug = slug;
+                dTO.Body = model.Body;
+                dTO.HasSideBar = model.HasSideBar;
+                db.SaveChanges();   
+            }
+            TempData["SM"] = "You have edited the page";
+            return RedirectToAction("EditPage");
+        }
+
+
+        // GET: Admin/Pages/PageDetails/id
+        public ActionResult PageDetails(int id)
+        {
+            PageVM model;
+            using (Db db=new Db())
+            {
+                PagesDTO dto = db.pages.Find(id);
+                if (dto==null)
+                {
+                    return Content("The page does not exist");
+                }
+                else
+                {
+                    model = new PageVM(dto);
+                }
+            }
+            return View(model);
+        }
+
     }
 }
