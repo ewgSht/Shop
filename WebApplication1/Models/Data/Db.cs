@@ -8,5 +8,6 @@ namespace WebApplication1.Models.Data
 {
     public class Db:DbContext
     {
+        public DbSet<PagesDTO> pages { get; set; }
     }
 }
