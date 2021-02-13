@@ -158,5 +158,65 @@ namespace WebApplication1.Areas.Admin.Controllers
             return View(model);
         }
 
+
+        //GET: Admin/Pages/DeletePage/id
+        public ActionResult DeletePage(int id)
+        {
+            using (Db db=new Db())
+            {
+                PagesDTO DTO = db.pages.Find(id);
+                db.pages.Remove(DTO);
+                db.SaveChanges();
+            }
+            TempData["SM"] = "You have delete a page!";
+            return RedirectToAction("Index");
+        }
+
+
+        //Создаем метод сортировки
+        //POST: Admin/Pages/ReoredPages
+        [HttpPost]
+        public void ReoredPages(int [] ids)
+        {
+            using (Db db=new Db())
+            {
+                int count = 1;
+                PagesDTO dTO;
+                foreach (var pageId in ids)
+                {
+                    dTO = db.pages.Find(pageId);
+                    dTO.Sorting = count;
+                    db.SaveChanges();
+                    count++;
+                }
+            }
+        }
+
+        //Get: Admin/Pages/EditSideBar
+        [HttpGet]
+        public ActionResult EditSideBar()
+        {
+            SidebarVM model;
+            using (Db db=new Db())
+            {
+                SidebarDTO dTO = db.Sidebars.Find(1);
+                model = new SidebarVM(dTO);
+            }
+            return View(model);
+        }
+
+        //Post: Admin/Pages/EditSideBar/
+        [HttpPost]
+        public ActionResult EditSideBar(SidebarVM model)
+        {
+            using (Db db = new Db())
+            {
+                SidebarDTO dTO = db.Sidebars.Find(1);
+                dTO.Body = model.Body;
+                db.SaveChanges();
+            }
+            TempData["SM"] = "You have edited sidebar";
+            return RedirectToAction("EditSideBar");
+        }
     }
 }
