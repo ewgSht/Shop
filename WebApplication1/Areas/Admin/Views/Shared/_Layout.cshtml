@@ -11,7 +11,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container-fluid">
-            @Html.ActionLink("Dashboard", "Index", "Dashboard","", new { @class = "navbar-brand" })
+            @Html.ActionLink("Dashboard", "Index", "Dashboard", "", new { @class = "navbar-brand" })
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -51,6 +51,7 @@
     <!--подключаем бандл к админ зоне-->
     @Scripts.Render("~/bundles/jqueryui")
 
+    @Scripts.Render("~/bundles/ckeditor")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

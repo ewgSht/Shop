@@ -29,6 +29,9 @@ namespace WebApplication1
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/jquery-ui.css"));
+
+            bundles.Add(new StyleBundle("~/bundles/ckeditor").Include(
+                     "~/Scripts/ckeditor/ckeditor.js"));
         }
     }
 }
